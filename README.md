@@ -1,2 +1,2 @@
 # follow-go
-study go-lang by codes
+Study go-lang by examples!
