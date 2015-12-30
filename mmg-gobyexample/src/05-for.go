@@ -22,4 +22,27 @@ func main() {
 		fmt.Println("loop")
 		break
 	}
+
+	fmt.Println("Default Break!")
+	for j := 0; j < 2; j++ {
+		for i := 0; i < 10; i++ {
+			if i > 5 {
+				break
+			}
+			fmt.Println(i)
+		}
+	}
+
+	fmt.Println("Super Break!")
+	JLoop:
+	for j := 0; j < 5; j++ {
+		for i := 0; i < 10; i++ {
+			if i > 5 {
+				break JLoop
+			}
+			fmt.Println(i)
+		}
+	}
+
+	fmt.Println("Done!")
 }
