@@ -1,25 +1,19 @@
-// _Defer_ is used to ensure that a function call is
-// performed later in a program's execution, usually for
-// purposes of cleanup. `defer` is often used where e.g.
-// `ensure` and `finally` would be used in other languages.
 
+// defer类似于Java的finally语句块，在程序或函数的末尾，即将关闭时执行，通常用于清理操作。
 package main
 
 import "fmt"
 import "os"
 
-// Suppose we wanted to create a file, write to it,
-// and then close when we're done. Here's how we could
-// do that with `defer`.
+// 本示例假定需要创建一个文件，然后写入数据，完成后关闭文件。
+// 本示例展示在该场景中如何使用defer。
 func main() {
 
-	// Immediately after getting a file object with
-	// `createFile`, we defer the closing of that file
-	// with `closeFile`. This will be executed at the end
-	// of the enclosing function (`main`), after
-	// `writeFile` has finished.
+	// 通常在得到文件对象后，立即defer对它的关闭操作；
+	// defer操作将在函数执行的最后依次执行。
 	f := createFile("godefer.txt")
 	defer closeFile(f)
+
 	writeFile(f)
 }
 
@@ -35,7 +29,6 @@ func createFile(p string) *os.File {
 func writeFile(f *os.File) {
 	fmt.Println("writing")
 	fmt.Fprintln(f, "data")
-
 }
 
 func closeFile(f *os.File) {
