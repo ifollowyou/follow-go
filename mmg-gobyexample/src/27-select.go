@@ -1,32 +1,26 @@
-// Go's _select_ lets you wait on multiple channel
-// operations. Combining goroutines and channels with
-// select is a powerful feature of Go.
-
+// 通过 select 来等待处理不同通道上不同处理时间的线程。
+// 在 Go 语言中， goroutine 和select是一个强力的组合。
 package main
 
 import "time"
 import "fmt"
 
 func main() {
-
-	// For our example we'll select across two channels.
 	c1 := make(chan string)
 	c2 := make(chan string)
 
-	// Each channel will receive a value after some amount
-	// of time, to simulate e.g. blocking RPC operations
-	// executing in concurrent goroutines.
+	// 模拟在不同线程中，各自的处理时间不同的场景
 	go func() {
 		time.Sleep(time.Second * 1)
 		c1 <- "one"
 	}()
+
 	go func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 3)
 		c2 <- "two"
 	}()
 
-	// We'll use `select` to await both of these values
-	// simultaneously, printing each one as it arrives.
+	// 通过使用 `select` 来等待全部数据到达。
 	for i := 0; i < 2; i++ {
 		select {
 		case msg1 := <-c1:

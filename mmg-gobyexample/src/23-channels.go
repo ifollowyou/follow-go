@@ -1,21 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 
-	// Create a new channel with `make(chan val-type)`.
-	// Channels are typed by the values they convey.
+	// 通道的创建语法 `make(chan val-type)`
 	messages := make(chan string)
 
-	// _Send_ a value into a channel using the `channel <-`
-	// syntax. Here we send `"ping"`  to the `messages`
-	// channel we made above, from a new goroutine.
-	go func() { messages <- "ping" }()
+	fmt.Println(time.Now())
 
-	// The `<-channel` syntax _receives_ a value from the
-	// channel. Here we'll receive the `"ping"` message
-	// we sent above and print it out.
+	// 向通道发送数据的语法为： `channel <-`
+	// 下面的示例在一个匿名函数中发送数据。
+	go func() {
+		time.Sleep(time.Second * 5)
+		messages <- "ping"
+	}()
+
+	// 从通道中读取数据的语法为： `<-channel`
+	// 从通道中读取数据是同步阻塞的方式。
 	msg := <-messages
 	fmt.Println(msg)
+	fmt.Println(time.Now())
 }

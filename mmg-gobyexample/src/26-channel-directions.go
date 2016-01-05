@@ -1,22 +1,15 @@
-// When using channels as function parameters, you can
-// specify if a channel is meant to only send or receive
-// values. This specificity increases the type-safety of
-// the program.
-
+// 有方向（读取或者接收）的通道示例，如果没有 <- 则表示双向
 package main
 
 import "fmt"
 
-// This `ping` function only accepts a channel for sending
-// values. It would be a compile-time error to try to
-// receive on this channel.
+// 在参数中，如果 <- 在 chan 的右边，表示通道只能接收数据，如pings
 func ping(pings chan <- string, msg string) {
 	fmt.Println(msg)
 	pings <- msg
 }
 
-// The `pong` function accepts one channel for receives
-// (`pings`) and a second for sends (`pongs`).
+// 在参数中，如果 <- 在 chan 的左边，表示通道只能读取数据，如pings
 func pong(pings <-chan string, pongs chan <- string) {
 	msg := <-pings
 	pongs <- msg
