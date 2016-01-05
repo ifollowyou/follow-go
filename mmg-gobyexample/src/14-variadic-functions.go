@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// 不限定入参个数，参数类似于集合
+// 不定长参数个数，参数是同一类型集合
 func sum(nums ...int) {
 	fmt.Print(nums, " ")
 	total := 0

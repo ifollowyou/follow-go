@@ -16,9 +16,7 @@ func main() {
 
 	// 输出序号
 	for i, num := range nums {
-		if num == 3 {
-			fmt.Println("index:", i)
-		}
+		fmt.Println("index:", i, "; value=", num)
 	}
 
 	// Range在map对象上返回key-value对。
@@ -31,4 +29,11 @@ func main() {
 	for i, c := range "AB" {
 		fmt.Println(i, c)
 	}
+
+	// 不管range前没有接收参数,都将循环数组长度的次数
+	count := 1
+	for range "AB" {
+		count++
+	}
+	fmt.Println(count)
 }
