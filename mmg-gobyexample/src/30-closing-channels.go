@@ -1,41 +1,31 @@
-// _Closing_ a channel indicates that no more values
-// will be sent on it. This can be useful to communicate
-// completion to the channel's receivers.
-
+// 关闭通道表明不再使用通道发送数据。
 package main
 
 import "fmt"
 
-// In this example we'll use a `jobs` channel to
-// communicate work to be done from the `main()` goroutine
-// to a worker goroutine. When we have no more jobs for
-// the worker we'll `close` the `jobs` channel.
 func main() {
 	jobs := make(chan int, 5)
 	done := make(chan bool)
 
-	// Here's the worker goroutine. It repeatedly receives
-	// from `jobs` with `j, more := <-jobs`. In this
-	// special 2-value form of receive, the `more` value
-	// will be `false` if `jobs` has been `close`d and all
-	// values in the channel have already been received.
-	// We use this to notify on `done` when we've worked
-	// all our jobs.
 	go func() {
+		// 无限循环，直到任务完成
 		for {
+			// 第二个变量more默认为true。
+			// 如果more为false，表明通道已被关闭，且数据已全部被接收。
 			j, more := <-jobs
 			if more {
 				fmt.Println("received job", j)
 			} else {
+				// 接收完毕
 				fmt.Println("received all jobs")
 				done <- true
+				// 退出循环
 				return
 			}
 		}
 	}()
 
-	// This sends 3 jobs to the worker over the `jobs`
-	// channel, then closes it.
+	// 发送3条任务，然后关闭通道。
 	for j := 1; j <= 3; j++ {
 		jobs <- j
 		fmt.Println("sent job", j)
@@ -43,8 +33,6 @@ func main() {
 	close(jobs)
 	fmt.Println("sent all jobs")
 
-	// We await the worker using the
-	// [synchronization](channel-synchronization) approach
-	// we saw earlier.
+	// 同步等待，直到接收到数据。
 	<-done
 }

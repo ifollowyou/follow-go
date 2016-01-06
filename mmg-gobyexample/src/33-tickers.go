@@ -1,9 +1,5 @@
-// [Timers](timers) are for when you want to do
-// something once in the future - _tickers_ are for when
-// you want to do something repeatedly at regular
-// intervals. Here's an example of a ticker that ticks
-// periodically until we stop it.
 
+// Ticker是一个定时器，周期性地在指定的时间间隔后执行事件。
 package main
 
 import "time"
@@ -11,21 +7,16 @@ import "fmt"
 
 func main() {
 
-	// Tickers use a similar mechanism to timers: a
-	// channel that is sent values. Here we'll use the
-	// `range` builtin on the channel to iterate over
-	// the values as they arrive every 500ms.
-	ticker := time.NewTicker(time.Millisecond * 500)
+	// 每秒钟触发一次的定时器
+	ticker := time.NewTicker(time.Second * 1)
 	go func() {
 		for t := range ticker.C {
 			fmt.Println("Tick at", t)
 		}
 	}()
 
-	// Tickers can be stopped like timers. Once a ticker
-	// is stopped it won't receive any more values on its
-	// channel. We'll stop ours after 1600ms.
-	time.Sleep(time.Millisecond * 1600)
+	// 3.1秒后停止定时器
+	time.Sleep(time.Millisecond * 3100)
 	ticker.Stop()
 	fmt.Println("Ticker stopped")
 }

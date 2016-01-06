@@ -1,26 +1,29 @@
-// Basic sends and receives on channels are blocking.
-// However, we can use `select` with a `default` clause to
-// implement _non-blocking_ sends, receives, and even
-// non-blocking multi-way `select`s.
-
+// 使用 select+default 来实现无阻塞操作。
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"time"
+)
 
 func main() {
-	messages := make(chan string)
+	log.Println(time.Now())
+
+	// 如果没有缓冲，则全部 select 都走 default 分支。
+	messages := make(chan string, 1)
 	signals := make(chan bool)
 
-	// Here's a non-blocking receive. If a value is
-	// available on `messages` then `select` will take
-	// the `<-messages` `case` with that value. If not
-	// it will immediately take the `default` case.
+	// 在下面的示例中，如果 messages 中有数据，则输出该数据；
+	// 否则直接走 default 分支退出。
 	select {
 	case msg := <-messages:
 		fmt.Println("received message", msg)
 	default:
 		fmt.Println("no message received")
 	}
+
+	log.Println(time.Now())
 
 	// A non-blocking send works similarly.
 	msg := "hi"
@@ -30,11 +33,9 @@ func main() {
 	default:
 		fmt.Println("no message sent")
 	}
+	log.Println(time.Now())
 
-	// We can use multiple `case`s above the `default`
-	// clause to implement a multi-way non-blocking
-	// select. Here we attempt non-blocking receives
-	// on both `messages` and `signals`.
+	// 多 case 的使用方式一致。
 	select {
 	case msg := <-messages:
 		fmt.Println("received message", msg)
@@ -43,4 +44,5 @@ func main() {
 	default:
 		fmt.Println("no activity")
 	}
+	log.Println(time.Now())
 }
