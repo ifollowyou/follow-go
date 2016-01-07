@@ -1,9 +1,5 @@
-// _[Rate limiting](http://en.wikipedia.org/wiki/Rate_limiting)_
-// is an important mechanism for controlling resource
-// utilization and maintaining quality of service. Go
-// elegantly supports rate limiting with goroutines,
-// channels, and [tickers](tickers).
-
+// Rate limiting 请求的访问频率控制是一种重要的服务质量保障手段，
+// 如果不加控制，服务器的资源很快就会被恶意请求占满。
 package main
 
 import "time"

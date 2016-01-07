@@ -1,16 +1,9 @@
-// In this example we'll look at how to implement
-// a _worker pool_ using goroutines and channels.
-
+// 线程池模拟
 package main
 
 import "fmt"
 import "time"
 
-// Here's the worker, of which we'll run several
-// concurrent instances. These workers will receive
-// work on the `jobs` channel and send the corresponding
-// results on `results`. We'll sleep a second per job to
-// simulate an expensive task.
 func worker(id int, jobs <-chan int, results chan <- int) {
 	for j := range jobs {
 		fmt.Println("worker", id, "processing job", j)
@@ -20,27 +13,23 @@ func worker(id int, jobs <-chan int, results chan <- int) {
 }
 
 func main() {
-
-	// In order to use our pool of workers we need to send
-	// them work and collect their results. We make 2
-	// channels for this.
+	// 任务通道和结果缓存通道
 	jobs := make(chan int, 100)
 	results := make(chan int, 100)
 
-	// This starts up 3 workers, initially blocked
-	// because there are no jobs yet.
+	// 初始化三条线程，由于目前没有任务，将阻塞等待
 	for w := 1; w <= 3; w++ {
 		go worker(w, jobs, results)
 	}
 
-	// Here we send 9 `jobs` and then `close` that
-	// channel to indicate that's all the work we have.
+	// 往任务通道发送9个任务
 	for j := 1; j <= 9; j++ {
 		jobs <- j
 	}
+	// 关闭任务通道，全部任务完成
 	close(jobs)
 
-	// Finally we collect all the results of the work.
+	// 输出任务完成情况
 	for a := 1; a <= 9; a++ {
 		fmt.Println(<-results)
 	}
