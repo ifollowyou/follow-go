@@ -2,7 +2,6 @@ package kttp
 
 import (
 	"strings"
-	"fmt"
 )
 
 const HTTP_PREFIX string = "http"
@@ -13,6 +12,5 @@ func CheckUrl(url string) (string) {
 	if !strings.HasPrefix(url, HTTP_PREFIX) {
 		url = HTTP_PROTOCOL + url
 	}
-	fmt.Println(url)
 	return url
 }

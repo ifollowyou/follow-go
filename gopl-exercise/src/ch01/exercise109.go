@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"follow-go/gopl-exercise/src/ks/kttp"
+	"ks/kttp"
 )
 
 const HTTP_PREFIX  string = "http://"
