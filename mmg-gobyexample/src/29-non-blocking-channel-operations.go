@@ -2,47 +2,43 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"time"
+    "log"
 )
 
 func main() {
-	log.Println(time.Now())
+    log.Println("start 1")
 
-	// 如果没有缓冲，则全部 select 都走 default 分支。
-	messages := make(chan string, 1)
-	signals := make(chan bool)
+    messages := make(chan string)
+    signals := make(chan bool)
 
-	// 在下面的示例中，如果 messages 中有数据，则输出该数据；
-	// 否则直接走 default 分支退出。
-	select {
-	case msg := <-messages:
-		fmt.Println("received message", msg)
-	default:
-		fmt.Println("no message received")
-	}
+    // 如果 messages 通道中有数据，则输出数据； 无数据则 default 退出。
+    select {
+    case msg := <-messages:
+        log.Println("received message", msg)
+    default:
+        log.Println("no message received")
+    }
 
-	log.Println(time.Now())
+    log.Println("start 2")
+    // A non-blocking send works similarly.
+    msg := "hi"
+    select {
+    case messages <- msg:
+        log.Println("sent message", msg)
+    default:
+        log.Println("no message sent")
+    }
 
-	// A non-blocking send works similarly.
-	msg := "hi"
-	select {
-	case messages <- msg:
-		fmt.Println("sent message", msg)
-	default:
-		fmt.Println("no message sent")
-	}
-	log.Println(time.Now())
+    log.Println("start 3")
+    // 多 case 的使用方式一致。
+    select {
+    case msg := <-messages:
+        log.Println("received message", msg)
+    case sig := <-signals:
+        log.Println("received signal", sig)
+    default:
+        log.Println("no activity")
+    }
 
-	// 多 case 的使用方式一致。
-	select {
-	case msg := <-messages:
-		fmt.Println("received message", msg)
-	case sig := <-signals:
-		fmt.Println("received signal", sig)
-	default:
-		fmt.Println("no activity")
-	}
-	log.Println(time.Now())
+    log.Println("All Done!")
 }

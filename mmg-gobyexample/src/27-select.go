@@ -1,5 +1,5 @@
 // 通过 select 来等待处理不同通道上不同处理时间的线程。
-// 在 Go 语言中， goroutine 和select是一个强力的组合。
+// 在 Go 语言中， goroutine 和 select 是一个强力的组合。
 package main
 
 import "time"
@@ -30,4 +30,6 @@ func main() {
 			fmt.Println("received", msg2)
 		}
 	}
+
+	fmt.Println("Done!")
 }
